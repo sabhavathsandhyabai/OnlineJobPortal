@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Online Job Portal</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Online Job Portal</h1>
+
+    <h2>Create Account</h2>
+
+    <form th:action="@{/register}"
+          th:object="${user}"
+          method="post">
+
+        <!-- Name -->
+        <label>Name:</label>
+
+        <input type="text"
+               th:field="*{name}"
+               placeholder="Enter your name"
+               required>
+
+        <br><br>
+
+
+        <!-- Email -->
+        <label>Email:</label>
+
+        <input type="email"
+               th:field="*{email}"
+               placeholder="Enter your email"
+               required>
+
+        <br><br>
+
+
+        <!-- Password -->
+        <label>Password:</label>
+
+        <input type="password"
+               th:field="*{password}"
+               placeholder="Enter your password"
+               required>
+
+        <br><br>
+
+
+        <!-- Role -->
+        <label>Register As:</label>
+
+        <select th:field="*{role}" required>
+
+            <option value="">
+                -- Select Role --
+            </option>
+
+            <option value="JOB_SEEKER">
+                Job Seeker
+            </option>
+
+            <option value="RECRUITER">
+                Recruiter
+            </option>
+
+        </select>
+
+        <br><br>
+
+
+        <!-- Register button -->
+        <button type="submit">
+            Register
+        </button>
+
+    </form>
+
+
+    <p>
+        Already have an account?
+
+        <a href="/login">
+            Login here
+        </a>
+    </p>
+
+</div>
+
+</body>
+</html>

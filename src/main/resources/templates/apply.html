@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Apply for Job</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <h1>Apply for Job</h1>
+
+    <h2 th:text="${job.title}">
+        Java Developer
+    </h2>
+
+    <p>
+        Company:
+        <b th:text="${job.company}"></b>
+    </p>
+
+    <p>
+        Location:
+        <b th:text="${job.location}"></b>
+    </p>
+
+    <p>
+        Salary:
+        <b th:text="${job.salary}"></b>
+    </p>
+
+    <p>
+        Skills:
+        <b th:text="${job.skills}"></b>
+    </p>
+
+    <form th:action="@{/apply}" method="post">
+
+        <!-- CSRF Protection -->
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
+        <!-- Job information -->
+        <input type="hidden"
+               name="jobId"
+               th:value="${job.id}">
+
+        <input type="hidden"
+               name="jobTitle"
+               th:value="${job.title}">
+
+        <h3>Application Details</h3>
+
+        <p>
+            Your application will be submitted using your
+            registered account details.
+        </p>
+
+        <button type="submit" class="btn">
+            Submit Application
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="/jobs">
+        Back to Jobs
+    </a>
+
+</div>
+
+</body>
+
+</html>

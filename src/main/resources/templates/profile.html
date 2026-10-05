@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>My Profile - Online Job Portal</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+
+        .profile-section {
+            margin-bottom: 30px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #ddd;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .no-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .upload-section {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+
+        .upload-section input {
+            margin-bottom: 15px;
+        }
+
+        .resume-buttons {
+            margin-top: 15px;
+        }
+
+        .resume-buttons a {
+            display: inline-block;
+            padding: 8px 15px;
+            margin-right: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>My Profile</h1>
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    <p th:if="${param.success}">
+        Profile updated successfully!
+    </p>
+
+    <p th:if="${param.uploadSuccess}">
+        Files uploaded successfully!
+    </p>
+
+
+    <!-- ========================= -->
+    <!-- PROFILE IMAGE -->
+    <!-- ========================= -->
+
+    <div class="profile-section">
+
+        <h2>Profile Photo</h2>
+
+        <!-- Show uploaded image -->
+
+        <div th:if="${user.profileImage != null and !user.profileImage.isEmpty()}">
+
+            <img th:src="@{/profile/image}"
+                 alt="Profile Image"
+                 class="profile-image">
+
+        </div>
+
+
+        <!-- Show placeholder when image doesn't exist -->
+
+        <div th:unless="${user.profileImage != null and !user.profileImage.isEmpty()}"
+             class="no-image">
+
+            No Photo
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- PROFILE DETAILS -->
+    <!-- ========================= -->
+
+    <form th:action="@{/profile/update}"
+          th:object="${user}"
+          method="post">
+
+        <!-- CSRF Protection -->
+
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
+
+        <label>Name:</label>
+
+        <input type="text"
+               th:field="*{name}"
+               placeholder="Enter your name"
+               required>
+
+        <br><br>
+
+
+        <label>Email:</label>
+
+        <input type="email"
+               th:field="*{email}"
+               readonly>
+
+        <br><br>
+
+
+        <label>Phone:</label>
+
+        <input type="text"
+               th:field="*{phone}"
+               placeholder="Enter phone number">
+
+        <br><br>
+
+
+        <label>Location:</label>
+
+        <input type="text"
+               th:field="*{location}"
+               placeholder="Example: Hyderabad">
+
+        <br><br>
+
+
+        <label>Skills:</label>
+
+        <textarea th:field="*{skills}"
+                  placeholder="Example: Java, Python, SQL, Spring Boot">
+        </textarea>
+
+        <br><br>
+
+
+        <label>Education:</label>
+
+        <textarea th:field="*{education}"
+                  placeholder="Example: B.Tech CSE - 2026">
+        </textarea>
+
+        <br><br>
+
+
+        <label>Experience:</label>
+
+        <textarea th:field="*{experience}"
+                  placeholder="Example: Fresher / 1 year experience">
+        </textarea>
+
+        <br><br>
+
+
+        <button type="submit">
+            Update Profile
+        </button>
+
+    </form>
+
+
+    <!-- ========================= -->
+    <!-- UPLOAD IMAGE + RESUME -->
+    <!-- ========================= -->
+
+    <div class="upload-section">
+
+        <h2>Upload Profile Image & Resume</h2>
+
+
+        <form th:action="@{/profile/upload}"
+              method="post"
+              enctype="multipart/form-data">
+
+            <!-- CSRF Protection -->
+
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+
+            <!-- PROFILE IMAGE -->
+
+            <label>Profile Image:</label>
+
+            <br>
+
+            <input type="file"
+                   name="profileImage"
+                   accept="image/*">
+
+            <br><br>
+
+
+            <!-- RESUME -->
+
+            <label>Resume:</label>
+
+            <br>
+
+            <input type="file"
+                   name="resume"
+                   accept=".pdf">
+
+            <br><br>
+
+
+            <button type="submit">
+                Upload Files
+            </button>
+
+        </form>
+
+
+        <!-- ========================= -->
+        <!-- RESUME OPTIONS -->
+        <!-- ========================= -->
+
+        <div th:if="${user.resume != null and !user.resume.isEmpty()}"
+             class="resume-buttons">
+
+            <h3>Your Resume</h3>
+
+            <!-- View Resume -->
+
+            <a href="/profile/resume"
+               target="_blank">
+                View Resume
+            </a>
+
+
+            <!-- Download Resume -->
+
+            <a href="/profile/resume/download">
+                Download Resume
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <br>
+
+
+    <!-- JOBS -->
+
+    <a href="/jobs">
+        Browse Jobs
+    </a>
+
+    <br><br>
+
+
+    <!-- APPLICATIONS -->
+
+    <a href="/my-applications">
+        My Applications
+    </a>
+
+    <br><br>
+
+
+    <!-- LOGOUT -->
+
+    <form th:action="@{/logout}"
+          method="post">
+
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}">
+
+        <button type="submit">
+            Logout
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>
